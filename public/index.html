@@ -21,9 +21,9 @@
             const inputField = document.getElementById('messageBody');
             const currentValue = inputField.value;
             if (currentValue.endsWith(' ')) {
-                inputField.value += text;
+                inputField.value += text + ' ';
             } else {
-                inputField.value += ' ' + text;
+                inputField.value += ' ' + text + ' ';
             }
         }
     </script>
