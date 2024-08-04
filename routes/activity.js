@@ -181,11 +181,7 @@ exports.execute = function(req, res) {
                                 keyValues = item.values;
                             }
                         }
-                        console.log('String', body)
-                        console.log('String KV', JSON.stringify(keyValues))
-                        if (body) {
-                            console.log('Test Message', body.replace(/\[(.*?)\]/g, (match, p1) => keyValues[p1] || match));
-                        }
+                        body = body.replace(/\[(.*?)\]/g, (match, p1) => keyValues[p1] || match);
                         resolve(data);
                     } else {
                         console.log("Error: Data not found");
@@ -199,8 +195,6 @@ exports.execute = function(req, res) {
                 });
         });
     };
-
-
 
     const insertRecord = (accessToken) => {
         return new Promise((resolve, reject) => {
