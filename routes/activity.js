@@ -156,7 +156,7 @@ exports.execute = function (req, res) {
         return new Promise((resolve, reject) => {
             const options = {
                 hostname: 'mc2-qgk1nhxg1mljb37pr3-6x9q4.rest.marketingcloudapis.com',
-                path: `/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`,
+                path: `/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq ${filterValue}`,
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
