@@ -154,10 +154,10 @@ exports.execute = function (req, res) {
     
     const getDataExtensionRecord = (externalKey, filterField, filterValue, accessToken) => {
         return new Promise((resolve, reject) => {
-            console.log('DE Details', `/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`);
+            let urlPath = `/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`);
             const options = {
                 hostname: 'mc2-qgk1nhxg1mljb37pr3-6x9q4.rest.marketingcloudapis.com',
-                path: `/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`,
+                path: urlPath,
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
