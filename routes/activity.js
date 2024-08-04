@@ -46,7 +46,6 @@ function logData(req) {
     console.log("secure: " + req.secure);
     console.log("originalUrl: " + req.originalUrl);
 }
-
 /*
  * POST Handler for / route of Activity (this is the edit route).
  */
@@ -58,7 +57,6 @@ exports.edit = function (req, res) {
     console.log("2");    
     console.log("1");    
     //console.log("Edited: "+req.body.inArguments[0]);    
-    
     // Data from the req and put it in an array accessible to the main app.
     //console.log( req.body );
     logData(req);
@@ -76,7 +74,6 @@ exports.save = function (req, res) {
     console.log("2");    
     console.log("1");    
     //console.log("Saved: "+req.body.inArguments[0]);
-    
     // Data from the req and put it in an array accessible to the main app.
     console.log( req.body );
     logData(req);
@@ -93,10 +90,16 @@ exports.execute = function (req, res) {
     console.log("3");    
     console.log("2");    
     console.log("1");    
-    console.log("Executed: " + req.body.inArguments[0]);
-    console.log("Executed JSON: " + JSON.stringify(req.body.inArguments[0]));
+    console.log("Executed: " + req.body.inArguments[
+        0
+    ]);
+    console.log("Executed JSON: " + JSON.stringify(req.body.inArguments[
+        0
+    ]));
     
-    var requestBody = req.body.inArguments[0];
+    var requestBody = req.body.inArguments[
+        0
+    ];
 
     const accountSid = requestBody.accountSid;
     const authToken = requestBody.authToken;
@@ -138,13 +141,15 @@ exports.execute = function (req, res) {
                         const tokenResponseJson = JSON.parse(tokenResponseBody);
                         resolve(tokenResponseJson.access_token);
                     } else {
-                        reject(`Failed to obtain token. Status code: ${tokenRes.statusCode}`);
+                        reject(`Failed to obtain token. Status code: ${tokenRes.statusCode
+                        }`);
                     }
                 });
             });
     
             tokenReq.on('error', (e) => {
-                reject(`Problem with token request: ${e.message}`);
+                reject(`Problem with token request: ${e.message
+                }`);
             });
     
             tokenReq.write(tokenData);
@@ -154,20 +159,28 @@ exports.execute = function (req, res) {
 
 const getDataExtensionRecord = (externalKey, filterField, filterValue, accessToken) => {
     return new Promise((resolve, reject) => {
-        const url = `https://mc2-qgk1nhxg1mljb37pr3-6x9q4.rest.marketingcloudapis.com/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`;
+        const url = `https: //mc2-qgk1nhxg1mljb37pr3-6x9q4.rest.marketingcloudapis.com/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`;
         const options = {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
+                'Authorization': `Bearer ${accessToken
+                    }`,
                 'Content-Type': 'application/json'
-            }
-        };
+                }
+            };
 
         fetch(url, options)
             .then(response => response.json())
             .then(data => {
                 if (data) {
                     console.log("Response:", data);
+const items = data.items;
+let keyValues = {}
+    for (const item of items) {
+        if (item.keys.contactkey === contactKey) {
+            keyValues = item.values;
+                        }
+                    }
                     resolve(data);
                 } else {
                     console.log("Error: Data not found");
@@ -176,10 +189,11 @@ const getDataExtensionRecord = (externalKey, filterField, filterValue, accessTok
             })
             .catch(error => {
                 console.log("Error:", error);
-                reject(`Failed to fetch record. Error: ${error.message}`);
+                reject(`Failed to fetch record. Error: ${error.message
+                }`);
             });
-    });
-};
+        });
+    };
 
  
 
@@ -204,7 +218,8 @@ const getDataExtensionRecord = (externalKey, filterField, filterValue, accessTok
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`,
+                    'Authorization': `Bearer ${accessToken
+                    }`,
                     'Content-Length': recordData.length
                 }
             };
@@ -218,15 +233,19 @@ const getDataExtensionRecord = (externalKey, filterField, filterValue, accessTok
     
                 recordRes.on('end', () => {
                     if (recordRes.statusCode === 200 || recordRes.statusCode === 201) {
-                        resolve(`Record inserted successfully. Response: ${recordResponseBody}`);
+                        resolve(`Record inserted successfully. Response: ${recordResponseBody
+                        }`);
                     } else {
-                        reject(`Failed to insert record. Status code: ${recordRes.statusCode}, Response: ${recordResponseBody}`);
+                        reject(`Failed to insert record. Status code: ${recordRes.statusCode
+                        }, Response: ${recordResponseBody
+                        }`);
                     }
                 });
             });
     
             recordReq.on('error', (e) => {
-                reject(`Problem with record request: ${e.message}`);
+                reject(`Problem with record request: ${e.message
+                }`);
             });
     
             recordReq.write(recordData);
@@ -243,14 +262,14 @@ const getDataExtensionRecord = (externalKey, filterField, filterValue, accessTok
                     console.log('Fetched record JSON:', JSON.stringify(record));
                     // Perform any necessary operations with the fetched record
                     return insertRecord(accessToken);
-                });
-        })
+        });
+    })
         .then((response) => {
             console.log(response);
-        })
+    })
         .catch((error) => {
             console.error(error);
-        });
+    });
 
     // FOR TESTING
     logData(req);
@@ -258,18 +277,14 @@ const getDataExtensionRecord = (externalKey, filterField, filterValue, accessTok
 
     // Used to decode JWT
     // JWT(req.body, process.env.jwtSecret, (err, decoded) => {
-
     //     // verification error -> unauthorized request
     //     if (err) {
     //         console.error(err);
     //         return res.status(401).end();
     //     }
-
     //     if (decoded && decoded.inArguments && decoded.inArguments.length > 0) {
-            
     //         // decoded in arguments
     //         var decodedArgs = decoded.inArguments[0];
-            
     //         logData(req);
     //         res.send(200, 'Execute');
     //     } else {
@@ -291,10 +306,9 @@ exports.publish = function (req, res) {
     console.log("2");    
     console.log("1");    
     //console.log("Published: "+req.body.inArguments[0]);        
-    
     // Data from the req and put it in an array accessible to the main app.
     //console.log( req.body );
-//     logData(req);
+    //     logData(req);
      res.send(200, 'Publish');
 };
 
@@ -309,7 +323,6 @@ exports.validate = function (req, res) {
     console.log("2");    
     console.log("1");    
     //console.log("Validated: "+req.body.inArguments[0]);       
-    
     // Data from the req and put it in an array accessible to the main app.
     //console.log( req.body );
     logData(req);
