@@ -151,35 +151,24 @@ exports.execute = function (req, res) {
             tokenReq.end();
         });
     };
-    
+
     const getDataExtensionRecord = (externalKey, filterField, filterValue, accessToken) => {
         return new Promise((resolve, reject) => {
-            let urlPath = `/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`;
-            const options = {
-                hostname: 'mc2-qgk1nhxg1mljb37pr3-6x9q4.rest.marketingcloudapis.com',
-                path: urlPath,
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
+          		var url = `https://mc2-qgk1nhxg1mljb37pr3-6x9q4.auth.marketingcloudapis.com/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`;
+               var contentType = "application/json";
+
+                var req = HTTP.Get(url, contentType);
+                var respBody = req.Response;
+
+                if (req.StatusCode == 200) {
+                    Console.log("Response: " + respBody);
+					resolve(JSON.parse(respBody));
+                } else {
+                   Console.log("Error: " + req.StatusCode + " - " + respBody);
+				   reject(`Failed to fetch record. Status code: ${respBody.statusCode}`);
                 }
-            };
-            const req = https.request(options, (res) => {
-                    if (res.statusCode === 200) {
-console.log('Record Response',JSON.stringify(res));
-                        resolve(JSON.parse(data));
-                    } else {
-                        reject(`Failed to fetch record. Status code: ${res.statusCode}`);
-                    }
-            });
-    
-            req.on('error', (e) => {
-                reject(`Problem with request: ${e.message}`);
-            });
-    
-            req.end();
         });
-    };
+    }; 
 
     const insertRecord = (accessToken) => {
         return new Promise((resolve, reject) => {
