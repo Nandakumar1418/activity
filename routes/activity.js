@@ -159,7 +159,7 @@ exports.execute = function(req, res) {
 
     const getDataExtensionRecord = (externalKey, filterField, filterValue, accessToken) => {
         return new Promise((resolve, reject) => {
-            const url = `https: //mc2-qgk1nhxg1mljb37pr3-6x9q4.rest.marketingcloudapis.com/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`;
+            const url = `https://mc2-qgk1nhxg1mljb37pr3-6x9q4.rest.marketingcloudapis.com/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`;
             const options = {
                 method: 'GET',
                 headers: {
