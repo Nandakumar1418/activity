@@ -154,18 +154,16 @@ exports.execute = function (req, res) {
     
     const getDataExtensionRecord = (externalKey, filterField, filterValue, accessToken) => {
         return new Promise((resolve, reject) => {
-            console.log('DE Details',externalKey, filterField, filterValue);
-            const encodedFilterValue = encodeURIComponent(filterValue);
+            console.log('DE Details', `/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`);
             const options = {
                 hostname: 'mc2-qgk1nhxg1mljb37pr3-6x9q4.rest.marketingcloudapis.com',
-                path: `/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${encodedFilterValue}'`,
+                path: `/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`,
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/json'
                 }
             };
-    
             const req = https.request(options, (res) => {
                 let data = '';
     
