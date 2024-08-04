@@ -243,7 +243,6 @@ exports.execute = function (req, res) {
         .then((accessToken) => {
             console.log('Access Token:', accessToken);
             return getDataExtensionRecord('F9C901F0-F2E7-460F-8FD1-4397E7367C9B', 'contactKey', contactKey, accessToken);
-        })
                 .then((record) => {
                     console.log('Fetched record:', record);
                     console.log('Fetched record JSON:', JSON.stringify(record));
