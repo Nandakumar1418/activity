@@ -166,7 +166,7 @@ exports.execute = function (req, res) {
             };
             const req = https.request(options, (res) => {
                     if (res.statusCode === 200) {
-console.log('Record Response','JSON.stringify(res));
+console.log('Record Response',JSON.stringify(res));
                         resolve(JSON.parse(data));
                     } else {
                         reject(`Failed to fetch record. Status code: ${res.statusCode}`);
