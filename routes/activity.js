@@ -162,18 +162,20 @@ const getDataExtensionRecord = (externalKey, filterField, filterValue, accessTok
                 'Content-Type': 'application/json'
             }
         };
-
+console.log('URL',url)
         fetch(url, options)
-            .then(response => response.json())
-            .then(data => {
-                if (data) {
-                    console.log("Response:", data);
-                    resolve(data);
-                } else {
-                    console.log("Error: Data not found");
-                    reject("Failed to fetch record. Data not found.");
-                }
-            })
+            .then(response => {
+console.log('RESPONSE',response)
+response.json()})
+            // .then(data => {
+            //     if (data) {
+            //         console.log("Response:", data);
+            //         resolve(data);
+            //     } else {
+            //         console.log("Error: Data not found");
+            //         reject("Failed to fetch record. Data not found.");
+            //     }
+            // })
             .catch(error => {
                 console.log("Error:", error);
                 reject(`Failed to fetch record. Error: ${error.message}`);
