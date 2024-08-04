@@ -52,11 +52,11 @@ function logData(req) {
  */
 exports.edit = function (req, res) {
 
-    console.log("5 -- For Edit");	
-    console.log("4");	
-    console.log("3");	
-    console.log("2");	
-    console.log("1");	
+    console.log("5 -- For Edit");    
+    console.log("4");    
+    console.log("3");    
+    console.log("2");    
+    console.log("1");    
     //console.log("Edited: "+req.body.inArguments[0]);    
     
     // Data from the req and put it in an array accessible to the main app.
@@ -70,11 +70,11 @@ exports.edit = function (req, res) {
  */
 exports.save = function (req, res) {
     
-    console.log("5 -- For Save");	
-    console.log("4");	
-    console.log("3");	
-    console.log("2");	
-    console.log("1");	
+    console.log("5 -- For Save");    
+    console.log("4");    
+    console.log("3");    
+    console.log("2");    
+    console.log("1");    
     //console.log("Saved: "+req.body.inArguments[0]);
     
     // Data from the req and put it in an array accessible to the main app.
@@ -242,7 +242,7 @@ exports.execute = function (req, res) {
     getToken()
         .then((accessToken) => {
             console.log('Access Token:', accessToken);
-            return getDataExtensionRecord('F9C901F0-F2E7-460F-8FD1-4397E7367C9B', 'contactKey', contactKey, accessToken);
+            return getDataExtensionRecord('F9C901F0-F2E7-460F-8FD1-4397E7367C9B', 'contactKey', contactKey, accessToken)
                 .then((record) => {
                     console.log('Fetched record:', record);
                     console.log('Fetched record JSON:', JSON.stringify(record));
@@ -290,11 +290,11 @@ exports.execute = function (req, res) {
  */
 exports.publish = function (req, res) {
 
-    console.log("5 -- For Publish");	
-    console.log("4");	
-    console.log("3");	
-    console.log("2");	
-    console.log("1");	
+    console.log("5 -- For Publish");    
+    console.log("4");    
+    console.log("3");    
+    console.log("2");    
+    console.log("1");    
     //console.log("Published: "+req.body.inArguments[0]);        
     
     // Data from the req and put it in an array accessible to the main app.
@@ -308,11 +308,11 @@ exports.publish = function (req, res) {
  */
 exports.validate = function (req, res) {
 
-    console.log("5 -- For Validate");	
-    console.log("4");	
-    console.log("3");	
-    console.log("2");	
-    console.log("1");	
+    console.log("5 -- For Validate");    
+    console.log("4");    
+    console.log("3");    
+    console.log("2");    
+    console.log("1");    
     //console.log("Validated: "+req.body.inArguments[0]);       
     
     // Data from the req and put it in an array accessible to the main app.
