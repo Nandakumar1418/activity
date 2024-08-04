@@ -182,6 +182,7 @@ exports.execute = function(req, res) {
                             }
                         }
                         console.log('String', body)
+                        console.log('String KV', JSON.stringify(keyValues))
                         if (body) {
                             console.log('Test Message', body.replace(/\[(.*?)\]/g, (match, p1) => keyValues[p1] || match));
                         }
