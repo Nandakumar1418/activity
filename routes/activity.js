@@ -88,13 +88,13 @@ exports.save = function (req, res) {
  */
 exports.execute = function (req, res) {
 
-    console.log("5 -- For Execute");	
-    console.log("4");	
-    console.log("3");	
-    console.log("2");	
-    console.log("1");	
-    console.log("Executed: "+req.body.inArguments[0]);
-    console.log("Executed JSON: "+ JSON.stringify(req.body.inArguments[0]));
+    console.log("5 -- For Execute");    
+    console.log("4");    
+    console.log("3");    
+    console.log("2");    
+    console.log("1");    
+    console.log("Executed: " + req.body.inArguments[0]);
+    console.log("Executed JSON: " + JSON.stringify(req.body.inArguments[0]));
     
     var requestBody = req.body.inArguments[0];
 
@@ -108,112 +108,156 @@ exports.execute = function (req, res) {
     const https = require('https');
 
     const getToken = () => {
-      return new Promise((resolve, reject) => {
-        const tokenData = JSON.stringify({
-          "grant_type": "client_credentials",
-          "client_id":"bj7x3dtz35bgk1nm0vb1o19n",
-          "client_secret":"oEm690UazJe4Nq7m4EVEvQvE"
+        return new Promise((resolve, reject) => {
+            const tokenData = JSON.stringify({
+                "grant_type": "client_credentials",
+                "client_id": "bj7x3dtz35bgk1nm0vb1o19n",
+                "client_secret": "oEm690UazJe4Nq7m4EVEvQvE"
+            });
+    
+            const tokenOptions = {
+                hostname: 'mc2-qgk1nhxg1mljb37pr3-6x9q4.auth.marketingcloudapis.com',
+                port: 443,
+                path: '/v2/token',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': tokenData.length
+                }
+            };
+    
+            const tokenReq = https.request(tokenOptions, (tokenRes) => {
+                let tokenResponseBody = '';
+    
+                tokenRes.on('data', (chunk) => {
+                    tokenResponseBody += chunk;
+                });
+    
+                tokenRes.on('end', () => {
+                    if (tokenRes.statusCode === 200) {
+                        const tokenResponseJson = JSON.parse(tokenResponseBody);
+                        resolve(tokenResponseJson.access_token);
+                    } else {
+                        reject(`Failed to obtain token. Status code: ${tokenRes.statusCode}`);
+                    }
+                });
+            });
+    
+            tokenReq.on('error', (e) => {
+                reject(`Problem with token request: ${e.message}`);
+            });
+    
+            tokenReq.write(tokenData);
+            tokenReq.end();
         });
-    
-        const tokenOptions = {
-          hostname: 'mc2-qgk1nhxg1mljb37pr3-6x9q4.auth.marketingcloudapis.com',
-          port: 443,
-          path: '/v2/token',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': tokenData.length
-          }
-        };
-    
-        const tokenReq = https.request(tokenOptions, (tokenRes) => {
-          let tokenResponseBody = '';
-    
-          tokenRes.on('data', (chunk) => {
-            tokenResponseBody += chunk;
-          });
-    
-          tokenRes.on('end', () => {
-            if (tokenRes.statusCode === 200) {
-              const tokenResponseJson = JSON.parse(tokenResponseBody);
-              resolve(tokenResponseJson.access_token);
-            } else {
-              reject(`Failed to obtain token. Status code: ${tokenRes.statusCode}`);
-            }
-          });
-        });
-    
-        tokenReq.on('error', (e) => {
-          reject(`Problem with token request: ${e.message}`);
-        });
-    
-        tokenReq.write(tokenData);
-        tokenReq.end();
-      });
     };
     
+    const getDataExtensionRecord = (externalKey, filterField, filterValue, accessToken) => {
+        return new Promise((resolve, reject) => {
+            const options = {
+                hostname: 'mc2-qgk1nhxg1mljb37pr3-6x9q4.rest.marketingcloudapis.com',
+                path: `/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`,
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            };
+    
+            const req = https.request(options, (res) => {
+                let data = '';
+    
+                res.on('data', (chunk) => {
+                    data += chunk;
+                });
+    
+                res.on('end', () => {
+                    if (res.statusCode === 200) {
+                        resolve(JSON.parse(data));
+                    } else {
+                        reject(`Failed to fetch record. Status code: ${res.statusCode}`);
+                    }
+                });
+            });
+    
+            req.on('error', (e) => {
+                reject(`Problem with request: ${e.message}`);
+            });
+    
+            req.end();
+        });
+    };
+
     const insertRecord = (accessToken) => {
-      return new Promise((resolve, reject) => {
-        const recordData = JSON.stringify([
-          {
-            "keys": {
-              "ContactId": contactKey
-            },
-            "values": {
-              "Message": body,
-              "Date": "12-12-2023"
-            }
-          }
-        ]);
+        return new Promise((resolve, reject) => {
+            const recordData = JSON.stringify([
+                {
+                    "keys": {
+                        "ContactId": contactKey
+                    },
+                    "values": {
+                        "Message": body,
+                        "Date": "12-12-2023"
+                    }
+                }
+            ]);
     
-        const recordOptions = {
-          hostname: 'mc2-qgk1nhxg1mljb37pr3-6x9q4.rest.marketingcloudapis.com',
-          port: 443,
-          path: '/hub/v1/dataevents/key:EAB3AF1A-A7A9-4CAD-88D7-87BFF29AD607/rowset',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Length': recordData.length
-          }
-        };
+            const recordOptions = {
+                hostname: 'mc2-qgk1nhxg1mljb37pr3-6x9q4.rest.marketingcloudapis.com',
+                port: 443,
+                path: '/hub/v1/dataevents/key:EAB3AF1A-A7A9-4CAD-88D7-87BFF29AD607/rowset',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Length': recordData.length
+                }
+            };
     
-        const recordReq = https.request(recordOptions, (recordRes) => {
-          let recordResponseBody = '';
+            const recordReq = https.request(recordOptions, (recordRes) => {
+                let recordResponseBody = '';
     
-          recordRes.on('data', (chunk) => {
-            recordResponseBody += chunk;
-          });
+                recordRes.on('data', (chunk) => {
+                    recordResponseBody += chunk;
+                });
     
-          recordRes.on('end', () => {
-            if (recordRes.statusCode === 200 || recordRes.statusCode === 201) {
-              resolve(`Record inserted successfully. Response: ${recordResponseBody}`);
-            } else {
-              reject(`Failed to insert record. Status code: ${recordRes.statusCode}, Response: ${recordResponseBody}`);
-            }
-          });
+                recordRes.on('end', () => {
+                    if (recordRes.statusCode === 200 || recordRes.statusCode === 201) {
+                        resolve(`Record inserted successfully. Response: ${recordResponseBody}`);
+                    } else {
+                        reject(`Failed to insert record. Status code: ${recordRes.statusCode}, Response: ${recordResponseBody}`);
+                    }
+                });
+            });
+    
+            recordReq.on('error', (e) => {
+                reject(`Problem with record request: ${e.message}`);
+            });
+    
+            recordReq.write(recordData);
+            recordReq.end();
         });
-    
-        recordReq.on('error', (e) => {
-          reject(`Problem with record request: ${e.message}`);
-        });
-    
-        recordReq.write(recordData);
-        recordReq.end();
-      });
     };
-    
+
     getToken()
-      .then((accessToken) => {
-        console.log('Access Token:', accessToken);
-        return insertRecord(accessToken);
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+        .then((accessToken) => {
+            console.log('Access Token:', accessToken);
+            return getDataExtensionRecord('F9C901F0-F2E7-460F-8FD1-4397E7367C9B', 'contactKey', contactKey, accessToken);
+        })
+                .then((record) => {
+                    console.log('Fetched record:', record);
+                    console.log('Fetched record JSON:', JSON.stringify(record));
+                    // Perform any necessary operations with the fetched record
+                    return insertRecord(accessToken);
+                });
+        })
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
     // FOR TESTING
     logData(req);
     res.send(200, 'Execute');
