@@ -105,7 +105,7 @@ exports.execute = function(req, res) {
     const authToken = requestBody.authToken;
     const to = requestBody.to;
     const from = requestBody.messagingService;
-    const body = requestBody.body;
+    let body = requestBody.body;
     const contactKey = requestBody.contactKey;
 
     const https = require('https');
