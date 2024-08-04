@@ -165,19 +165,12 @@ exports.execute = function (req, res) {
                 }
             };
             const req = https.request(options, (res) => {
-                let data = '';
-    
-                res.on('data', (chunk) => {
-                    data += chunk;
-                });
-    
-                res.on('end', () => {
                     if (res.statusCode === 200) {
+console.log('Record Response','JSON.stringify(res));
                         resolve(JSON.parse(data));
                     } else {
                         reject(`Failed to fetch record. Status code: ${res.statusCode}`);
                     }
-                });
             });
     
             req.on('error', (e) => {
