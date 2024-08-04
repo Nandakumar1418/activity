@@ -152,23 +152,35 @@ exports.execute = function (req, res) {
         });
     };
 
-    const getDataExtensionRecord = (externalKey, filterField, filterValue, accessToken) => {
-        return new Promise((resolve, reject) => {
-          		var url = `https://mc2-qgk1nhxg1mljb37pr3-6x9q4.auth.marketingcloudapis.com/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`;
-               var contentType = "application/json";
+const getDataExtensionRecord = (externalKey, filterField, filterValue, accessToken) => {
+    return new Promise((resolve, reject) => {
+        const url = `https://mc2-qgk1nhxg1mljb37pr3-6x9q4.auth.marketingcloudapis.com/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        };
 
-                var req = HTTP.Get(url, contentType);
-                var respBody = req.Response;
-
-                if (req.StatusCode == 200) {
-                    Console.log("Response: " + respBody);
-					resolve(JSON.parse(respBody));
+        fetch(url, options)
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    console.log("Response:", data);
+                    resolve(data);
                 } else {
-                   Console.log("Error: " + req.StatusCode + " - " + respBody);
-				   reject(`Failed to fetch record. Status code: ${respBody.statusCode}`);
+                    console.log("Error: Data not found");
+                    reject("Failed to fetch record. Data not found.");
                 }
-        });
-    }; 
+            })
+            .catch(error => {
+                console.log("Error:", error);
+                reject(`Failed to fetch record. Error: ${error.message}`);
+            });
+    });
+};
+ 
 
     const insertRecord = (accessToken) => {
         return new Promise((resolve, reject) => {
