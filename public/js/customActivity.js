@@ -100,7 +100,10 @@ define([
             "authToken": authToken,
             "messagingService": messagingService,
             "body": body,
-            "firstname": "{{Contact.Attribute.Customers.FirstName}}",
+            "firstName": "{{Contact.Attribute.Customers.FirstName}}",
+            "lastName": "{{Contact.Attribute.Customers.LastName}}",
+            "emailAddress": "{{Contact.Attribute.Customers.EmailAddress}}",
+            "phone": "{{Contact.Attribute.Customers.Phone}}",
             "to": "{{Contact.Attribute.Customers.Phone}}",
             "contactKey":"{{Contact.Attribute.Customers.ContactKey}}"
         }];
