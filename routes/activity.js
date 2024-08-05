@@ -108,6 +108,8 @@ exports.execute = function(req, res) {
     let body = requestBody.body;
     const contactKey = requestBody.contactKey;
 
+    body = body.replace(/\[(.*?)\]/g, (match, p1) => requestBody[p1] || match);
+
     const https = require('https');
 
     const getToken = () => {
@@ -154,45 +156,6 @@ exports.execute = function(req, res) {
 
             tokenReq.write(tokenData);
             tokenReq.end();
-        });
-    };
-
-    const getDataExtensionRecord = (externalKey, filterField, filterValue, accessToken) => {
-        return new Promise((resolve, reject) => {
-            const url = `https://mc2-qgk1nhxg1mljb37pr3-6x9q4.rest.marketingcloudapis.com/data/v1/customobjectdata/key/${externalKey}/rowset?$filter=${filterField} eq '${filterValue}'`;
-            const options = {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken
-                    }`,
-                    'Content-Type': 'application/json'
-                }
-            };
-
-            fetch(url, options)
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        console.log("Response:", data);
-                        const items = data.items;
-                        let keyValues = {}
-                        for (const item of items) {
-                            if (item.keys.contactkey === contactKey) {
-                                keyValues = item.values;
-                            }
-                        }
-                        body = body.replace(/\[(.*?)\]/g, (match, p1) => keyValues[p1] || match);
-                        resolve(data);
-                    } else {
-                        console.log("Error: Data not found");
-                        reject("Failed to fetch record. Data not found.");
-                    }
-                })
-                .catch(error => {
-                    console.log("Error:", error);
-                    reject(`Failed to fetch record. Error: ${error.message
-                }`);
-                });
         });
     };
 
@@ -253,13 +216,7 @@ exports.execute = function(req, res) {
     getToken()
         .then((accessToken) => {
             console.log('Access Token:', accessToken);
-            return getDataExtensionRecord('F9C901F0-F2E7-460F-8FD1-4397E7367C9B', 'contactKey', contactKey, accessToken)
-                .then((record) => {
-                    console.log('Fetched record:', record);
-                    console.log('Fetched record JSON:', JSON.stringify(record));
-                    // Perform any necessary operations with the fetched record
-                    return insertRecord(accessToken);
-                });
+            return insertRecord(accessToken);
         })
         .then((response) => {
             console.log(response);
