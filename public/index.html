@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>POC: Custom Journey Builder Activity</title>
+    <title>Custom Journey Builder Activity - Twilio SMS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/require.js"></script>
@@ -12,55 +11,155 @@
             var config = {
                 baseUrl: 'js'
             };
+
             var dependencies = [
                 'customActivity'
             ];
+
             require(config, dependencies); 
         })();
-        function appendText(text) {
-            const inputField = document.getElementById('messageBody');
-            const currentValue = inputField.value;
-            if (currentValue.endsWith(' ')) {
-                inputField.value += text + ' ';
-            } else {
-                inputField.value += ' ' + text + ' ';
-            }
-        }
     </script>
-    <!--Styles-->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            function updatePreview() {
+                var messageBody = $('#messageBody').val();
+                $('#messagePreview').text(messageBody);
+            }
+
+            $('#insertFieldButton').click(function() {
+                var selectedField = $('#personalizationField').val();
+                var messageBody = $('#messageBody');
+                var cursorPosition = messageBody.prop("selectionStart");
+                var textBeforeCursor = messageBody.val().substring(0, cursorPosition);
+                var textAfterCursor = messageBody.val().substring(cursorPosition);
+
+                messageBody.val(textBeforeCursor + selectedField + textAfterCursor);
+                updatePreview();
+            });
+
+            $('#messageBody').on('input', function() {
+                updatePreview();
+            });
+
+            updatePreview(); // Initial call to set the preview when the page loads
+        });
+    </script>
+
+    <!-- Styles -->
     <style type="text/css">
-        body {
-            padding: 20px;
+        html, body {
+            height: 100%;
             margin: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        #step1 h2{
+            padding: 0 20px;
         }
         #step1 {
             display: block;
         }
+        #container {
+            display: flex;
+            justify-content: space-between; /* Space between form and preview */
+            /* align-items: center; */
+            height: 90vh; /* Full viewport height */
+            overflow: hidden; /* Prevent scrolling */
+            padding: 10px; /* Adjust padding as needed */
+        }
+        #formSection {
+            flex: 1;
+            max-width: 100%;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+        #phoneContainer {
+            width: 33.33%; /* One-third of the window width */
+            max-width: 360px; /* Maximum width of the phone container */
+            height: 100%; /* Fit within viewport height */
+            border: 16px solid #333;
+            border-radius: 36px;
+            /*padding: 20px;*/
+            background: #fff;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        #phoneScreen {
+            width: 100%;
+            height: 100%;
+            background: #f8f9fa;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* Align message to bottom */
+            padding: 10px;
+            box-sizing: border-box; /* Ensure padding does not cause overflow */
+        }
+        #messagePreview {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 10px 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            word-wrap: break-word;
+            align-self: flex-start; /* Align message bubble to the left */
+            margin-bottom: 10px;
+            position: relative;
+            white-space: pre-wrap; /* Preserve whitespace and line breaks */
+        }
+        #messagePreview::before {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 15px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #fff;
+        }
+        #phoneContainer::before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: calc(50% - 15px);
+            width: 30px;
+            height: 5px;
+            background: #333;
+            border-radius: 10px;
+        }
     </style>
+
 </head>
 <body>
 <div id="step1" class="step">
-    <div class="form-group">
-        <div><label for="messageBody">Enter SMS Message:</label></div>
-        <textarea class="form-control" id="messageBody" type="text" name="messageBody" rows="4" style="width:100%"></textarea>        
-    </div>           
-    <div hidden class="form-group">
-        <div><label for="messagingService">Messaging Service SID:</label></div>
-        <input class="form-control" id="messagingService" type="text" name="messagingService" value="">
-    </div>     
-    <div hidden class="form-group">
-        <div><label for="accountSID">Account SID:</label></div>
-        <input class="form-control" id="accountSID" type="text" name="accountSID" value="">
-    </div>
-    <div hidden class="form-group">
-        <div><label for="authToken">Auth Token:</label></div>
-        <input class="form-control" id="authToken" type="text" name="authToken" value="">
-    </div>    
-    <div class="button-container">
-        <button onclick="appendText('[firstName]')">First Name</button>
-        <button onclick="appendText('[lastName]')">Last Name</button>
-        <button onclick="appendText('[emailAddress]')">Email</button>
-        <button onclick="appendText('[phone]')">Phone</button>
+    <h2>Create SMS Content:</h2>
+    <div id="container">
+        <div id="formSection">
+            <div class="form-group">
+                <div><label for="messageBody">Create message body:</label></div>
+                <textarea class="form-control" id="messageBody" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="personalizationField">Insert Personalization Field:</label>
+                <select class="form-control" id="personalizationField">
+                    <option value="{{Contact.Attribute.Customers.FirstName}}">First Name</option>
+                    <option value="{{Contact.Attribute.Customers.LastName}}">Last Name</option>
+                    <option value="{{Contact.Attribute.Customers.EmailAddress}}">Email Address</option>
+                </select>
+            </div>
+            <button class="btn btn-secondary" id="insertFieldButton">Insert Field</button>  
+        </div>
+        <div id="phoneContainer">
+            <div id="phoneScreen">
+                <div id="messagePreview"></div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
