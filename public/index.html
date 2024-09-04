@@ -18,6 +18,7 @@
 
             require(config, dependencies); 
         })();
+        
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -43,6 +44,17 @@
 
             updatePreview(); // Initial call to set the preview when the page loads
         });
+const textarea = document.getElementById('messageBody');
+const paragraph = document.getElementById('messagePreview');
+function updateParagraph() {
+    const textareaValue = textarea.value;
+    if (textareaValue.trim() === '') {
+        paragraph.textContent = textarea.getAttribute('placeholder');
+    } else {
+        paragraph.textContent = textareaValue;
+    }
+}
+updateParagraph();
     </script>
 
     <!-- Styles -->
