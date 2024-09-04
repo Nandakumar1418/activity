@@ -76,10 +76,10 @@
             width: 33.33%; /* One-third of the window width */
             max-width: 360px; /* Maximum width of the phone container */
             height: 100%; /* Fit within viewport height */
-            border: 16px solid #333;
-            border-radius: 36px;
+            /*border: 16px solid #333;
+            border-radius: 36px; */
             /*padding: 20px;*/
-            background: #fff;
+            background: black;
             position: relative;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             box-sizing: border-box;
@@ -90,7 +90,7 @@
         }
         #phoneScreen {
             width: 100%;
-            height: 100%;
+            height: 80%;
             background: #f8f9fa;
             border-radius: 20px;
             overflow: hidden;
@@ -99,6 +99,10 @@
             justify-content: flex-end; /* Align message to bottom */
             padding: 10px;
             box-sizing: border-box; /* Ensure padding does not cause overflow */
+        }
+        #phoneHeader{
+            width: 100%;
+            height: 20%;
         }
         #messagePreview {
             background-color: #fff;
@@ -156,6 +160,9 @@
             <button class="btn btn-secondary" id="insertFieldButton">Insert Field</button>  
         </div>
         <div id="phoneContainer">
+            <div id="phoneHeader">
+                
+            </div>
             <div id="phoneScreen">
                 <div id="messagePreview"></div>
             </div>
