@@ -34,6 +34,7 @@
     "jsonwebtoken": "^8.0.1",
     "request": "^2.81.0",
     "require": "^2.4.20",
+     "flatted": "^3.2.0",
     "twilio": "^3.36.0",
     "uglify-js": "^3.6.4"
   }
