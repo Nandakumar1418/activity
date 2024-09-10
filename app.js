@@ -9,6 +9,7 @@ var path        = require('path');
 var request     = require('request');
 var routes      = require('./routes');
 var activity    = require('./routes/activity');
+//const verifyJWT = require(Path.join(__dirname, '..', 'lib', 'jwtDecoder.js'));
 
 var app = express();
 
