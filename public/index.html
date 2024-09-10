@@ -18,7 +18,6 @@
 
             require(config, dependencies); 
         })();
-        
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -44,17 +43,6 @@
 
             updatePreview(); // Initial call to set the preview when the page loads
         });
-const textarea = document.getElementById('messageBody');
-const paragraph = document.getElementById('messagePreview');
-function updateParagraph() {
-    const textareaValue = textarea.value;
-    if (textareaValue.trim() === '') {
-        paragraph.textContent = textarea.getAttribute('placeholder');
-    } else {
-        paragraph.textContent = textareaValue;
-    }
-}
-updateParagraph();
     </script>
 
     <!-- Styles -->
@@ -88,61 +76,43 @@ updateParagraph();
             width: 33.33%; /* One-third of the window width */
             max-width: 360px; /* Maximum width of the phone container */
             height: 100%; /* Fit within viewport height */
-            /*border: 16px solid #333;
-            border-radius: 36px; */
+            border: 16px solid #333;
+            border-radius: 36px;
             /*padding: 20px;*/
-/*             background: black; */
+            background: #fff;
             position: relative;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             box-sizing: border-box;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             overflow: hidden; /* Prevent scrolling */
         }
-        #phoneHeader{
-            width: 100%;
-            height: 15%;
-/*             padding: 5%; */
-            background-color : #004085;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-#phoneHeader span {
-font-size: 12px;
-    font-weight: bold;
-    color: white;
-}
         #phoneScreen {
             width: 100%;
-            height: 85%;
-            background: #80808047;
-/*             border-radius: 20px; */
+            height: 100%;
+            background: #f8f9fa;
+            border-radius: 20px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            justify-content: flex-end; /* Align message to bottom */
             padding: 10px;
             box-sizing: border-box; /* Ensure padding does not cause overflow */
         }
-
         #messagePreview {
             background-color: #fff;
             border-radius: 15px;
-            padding: 5px 10px;
+            padding: 10px 15px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             max-width: 100%;
             word-wrap: break-word;
             align-self: flex-start; /* Align message bubble to the left */
             margin-bottom: 10px;
             position: relative;
-font-size: 10px;
-font-weight: 600;
             white-space: pre-wrap; /* Preserve whitespace and line breaks */
         }
-/*         #messagePreview::before {
+        #messagePreview::before {
             content: "";
             position: absolute;
             bottom: -10px;
@@ -152,8 +122,8 @@ font-weight: 600;
             border-left: 10px solid transparent;
             border-right: 10px solid transparent;
             border-top: 10px solid #fff;
-        } */
-/*         #phoneContainer::before {
+        }
+        #phoneContainer::before {
             content: "";
             position: absolute;
             top: 20px;
@@ -162,7 +132,7 @@ font-weight: 600;
             height: 5px;
             background: #333;
             border-radius: 10px;
-        } */
+        }
     </style>
 
 </head>
@@ -173,7 +143,7 @@ font-weight: 600;
         <div id="formSection">
             <div class="form-group">
                 <div><label for="messageBody">Create message body:</label></div>
-                <textarea class="form-control" id="messageBody" rows="4" placeholder="Enter your Message..."></textarea>
+                <textarea class="form-control" id="messageBody" rows="4"></textarea>
             </div>
             <div class="form-group">
                 <label for="personalizationField">Insert Personalization Field:</label>
@@ -186,12 +156,6 @@ font-weight: 600;
             <button class="btn btn-secondary" id="insertFieldButton">Insert Field</button>  
         </div>
         <div id="phoneContainer">
-            <div id="phoneHeader">
-<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 48 48">
-<circle cx="24" cy="24" r="20" fill="#2979ff"></circle><circle cx="24" cy="19" r="4" fill="#2962ff"></circle><path fill="#2962ff" d="M24,26c0,0-9,0-9,5.727C15,35,16.636,35,24,35s9,0,9-3.273C33,26,24,26,24,26z"></path><circle cx="24" cy="18" r="4" fill="#fff"></circle><path fill="#fff" d="M24,25c0,0-9,0-9,5.727C15,34,16.636,34,24,34s9,0,9-3.273C33,25,24,25,24,25z"></path>
-</svg>
-<span>[FROM NAME]</span>
-            </div>
             <div id="phoneScreen">
                 <div id="messagePreview"></div>
             </div>
