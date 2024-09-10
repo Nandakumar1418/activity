@@ -7,62 +7,66 @@
     "type": "REST",
     "lang": {
        "en-US": {
-           "name": "Twilio SMS",
-           "description": "Send Twilio SMS with Journey Builder",
-           "TwilioMessage":"test"
+           "name": "Twilio 4CL SMS",
+           "description": "Send Twilio SMS with Journey Builder"
        }
     },
     "arguments": {
         "execute": {
             "inArguments": [
                 {
-                   "email": "{{Contact.Attribute.Customers.EmailAddress}}",
+                  "email": "{{Contact.Attribute.Customers.EmailAddress}}",
                   "to": "{{Contact.Attribute.Customers.Phone}}" ,
                   "contactKey":"{{Contact.Attribute.Customers.ContactKey}}",
                   "fname":"{{Contact.Attribute.Customers.FirstName}}" 
                 }               
             ],
             "outArguments": [],
-            "url": "https://activity-production-960f.up.railway.app/journeybuilder/execute",
+            "url": "https://sfmc-customactivity-poc-9e1ad4a92518.herokuapp.com/journeybuilder/execute",
             "verb": "POST",
             "body": "",
             "format": "json",
-            "useJwt": false,
-            "timeout": 2000
+            "header": "",
+            "useJwt": true,
+            "timeout": 10000
         }
     },
     "configurationArguments": {
-      "applicationExtensionKey": "daa034ca-0bed-4f88-b003-8c429205e14f",
+      "applicationExtensionKey": "3eceb1d4-695f-4254-bf4f-c06fcbdca609",
        "save": {
-           "url": "https://activity-production-960f.up.railway.app/journeybuilder/save",
+           "url": "https://sfmc-customactivity-poc-9e1ad4a92518.herokuapp.com/journeybuilder/save",
             "verb": "POST",
             "body": "",
             "format": "json",
-            "useJwt": false,
+            "header": "",
+            "useJwt": true,
             "timeout": 2000
        },
        "publish": {
-           "url": "https://activity-production-960f.up.railway.app/journeybuilder/publish",
+           "url": "https://sfmc-customactivity-poc-9e1ad4a92518.herokuapp.com/journeybuilder/publish",
             "verb": "POST",
             "body": "",
             "format": "json",
-            "useJwt": false,
+            "header": "",            
+            "useJwt": true,
             "timeout": 2000
        },
        "validate": {
-           "url": "https://activity-production-960f.up.railway.app/journeybuilder/validate",
+           "url": "https://sfmc-customactivity-poc-9e1ad4a92518.herokuapp.com/journeybuilder/validate",
             "verb": "POST",
             "body": "",
             "format": "json",
-            "useJwt": false,
+            "header": "",             
+            "useJwt": true,
             "timeout": 2000
        },
        "stop": {
-           "url": "https://activity-production-960f.up.railway.app/journeybuilder/stop",
+           "url": "https://sfmc-customactivity-poc-9e1ad4a92518.herokuapp.com/journeybuilder/stop",
             "verb": "POST",
             "body": "",
             "format": "json",
-            "useJwt": false,
+            "header": "",            
+            "useJwt": true,
             "timeout": 2000
        }
     },
@@ -80,20 +84,7 @@
         "arguments": {
             "execute": {
                 "inArguments": [
-                    {
-                        "accountSid": {
-                            "dataType": "String",
-                            "isNullable": false,
-                            "direction": "out"   
-                        }
-                    },                    
-                    {
-                        "authToken": {
-                            "dataType": "String",
-                            "isNullable": false,
-                            "direction": "out"   
-                        }
-                    },                    
+                               
                     {
                         "from": {
                             "dataType": "Phone",
